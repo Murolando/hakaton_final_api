@@ -123,7 +123,7 @@ CREATE TABLE "forward_src"
 CREATE TABLE "achive"
 (
     id                     serial PRIMARY KEY not null unique,
-    course                 int references "course_id"(id) on delete cascade, 
+    course                 int references "course"(id) on delete cascade, 
     name                   varchar(50),
     description            varchar(300),
     value                  int null

@@ -8,18 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary SignUp
-// @Tags auth
-// @Description create account
-// @ID create-account
-// @Accept  json
-// @Produce  json
-// @Param input body ent.UserRequest true "account info"
-// @Success 200 {object} string
-// @Failure 400,404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Failure default {object} map[string]interface{}
-// @Router /api/auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var input ent.User
 	if err := c.BindJSON(&input); err != nil {
@@ -35,18 +23,6 @@ func (h *Handler) signUp(c *gin.Context) {
 	newResponse(c, "", token)
 }
 
-// @Summary SignIn
-// @Tags auth
-// @Description auth in account
-// @ID auth in account
-// @Accept  json
-// @Produce  json
-// @Param input body ent.Auth true "email and password"
-// @Success 200 {object} string
-// @Failure 400,404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Failure default {object} map[string]interface{}
-// @Router /api/auth/sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
 	var input ent.Auth
 
@@ -73,18 +49,6 @@ func (h *Handler) signIn(c *gin.Context) {
 
 }
 
-// @Summary NewRefreshJwtTokens
-// @Tags auth
-// @Description generate new pair of jwt and refresh
-// @ID gen new tokens
-// @Accept  json
-// @Produce  json
-// @Param   refresh path string true "old refresh token"
-// @Success      200  {object}  map[string]interface{}
-// @Failure      400  {object}  map[string]interface{}
-// @Failure      404  {object}  map[string]interface{}
-// @Failure      500  {object}  map[string]interface{}
-// @Router /api/auth/refresh/{refresh} [get]
 func (h *Handler) newRefresh(c *gin.Context) {
 	refresh := c.Param("refresh")
 
