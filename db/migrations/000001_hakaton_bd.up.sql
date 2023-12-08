@@ -25,6 +25,7 @@ CREATE TABLE "course"
     id                    serial PRIMARY KEY not null unique,
     description           varchar(300),
     course_age            int,
+    value                 int,
     name                  varchar(100)
     
 );
