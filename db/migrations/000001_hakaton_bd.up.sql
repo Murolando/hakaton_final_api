@@ -16,6 +16,8 @@ CREATE TABLE "user"
     age                   int,
     refresh               varchar(100) null,
     total_points          int,
+    final_exam_current    int,
+    final_exam_max        int,            
     expired_at            timestamp null
 );
 CREATE TABLE "course"
