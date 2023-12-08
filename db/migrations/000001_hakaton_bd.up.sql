@@ -128,7 +128,7 @@ CREATE TABLE "user_achive"
 (
     id                    serial PRIMARY KEY not null unique,
     achive_id             int references "achive"(id) on delete cascade,
-    user_id               int references "user"(id) on delete cascade,
+    user_id               int references "user"(id) on delete cascade
 );
 CREATE TABLE "product"
 (
