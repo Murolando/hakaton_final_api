@@ -15,12 +15,16 @@ CREATE TABLE "user"
     registration_datetime TIMESTAMP(0) NOT NULL,
     age                   int,
     refresh               varchar(100) null,
+    total_points          int,
     expired_at            timestamp null
 );
 CREATE TABLE "course"
 (
     id                    serial PRIMARY KEY not null unique,
+    description           varchar(300),
+    course_age            int,
     name                  varchar(100)
+    
 );
 CREATE TABLE "lesson_type"
 (
@@ -107,5 +111,28 @@ CREATE TABLE "forward_src"
 (
     id                     serial PRIMARY KEY not null unique,
     forward_id             int references "forward"(id) on delete cascade,
+    url                    varchar(255)
+);
+
+-- achive 
+CREATE TABLE "achive"
+(
+    id                     serial PRIMARY KEY not null unique,
+    name                   varchar(50),
+    description            varchar(300),
+    value                  int null
+);
+CREATE TABLE "user_achive"
+(
+    id                    serial PRIMARY KEY not null unique,
+    achive_id             int references "achive"(id) on delete cascade,
+    user_id               int references "user"(id) on delete cascade,
+);
+CREATE TABLE "product"
+(
+    id                     serial PRIMARY KEY not null unique,
+    name                   varchar(50),
+    description            varchar(300),
+    price                  int not null,
     url                    varchar(255)
 );
