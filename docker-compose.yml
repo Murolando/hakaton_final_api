@@ -22,6 +22,14 @@ services:
       - default
     ports:
       - "8082:8080"
+  nginx_front:
+    build: 
+      context: "./nginx_front"
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - "api"
   # minio:
   #   image: minio/minio
   #   restart: always
