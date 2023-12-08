@@ -7,6 +7,9 @@ type User struct {
 	RoleId               *int    `json:"role-id"`
 	RegistrationDateTime *string `json:"registration-datetime"`
 	Age                  int     `json:"age"`
+
+
+	
 }
 type UserRequest struct {
 	// Name *string `json:"name"`
