@@ -26,6 +26,7 @@ CREATE TABLE "course"
     description           varchar(300),
     course_age            int,
     value                 int,
+    url                    varchar(255),
     name                  varchar(100)
     
 );
@@ -39,6 +40,7 @@ CREATE TABLE "lesson"
     id                    serial PRIMARY KEY not null unique,
     lesson_type           int references "lesson_type"(id) on delete cascade,
     course_id             int references "course"(id) on delete cascade,
+    value                 int,
     name                  varchar(100)
 );
 CREATE TABLE "user_lesson"
@@ -121,6 +123,7 @@ CREATE TABLE "forward_src"
 CREATE TABLE "achive"
 (
     id                     serial PRIMARY KEY not null unique,
+    course                 int references "course_id"(id) on delete cascade, 
     name                   varchar(50),
     description            varchar(300),
     value                  int null
