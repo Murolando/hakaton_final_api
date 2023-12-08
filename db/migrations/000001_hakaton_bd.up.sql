@@ -25,7 +25,6 @@ CREATE TABLE "course"
     id                    serial PRIMARY KEY not null unique,
     description           varchar(300),
     course_age            int,
-    value                 int,
     url                    varchar(255),
     name                  varchar(100)
     
@@ -35,6 +34,9 @@ CREATE TABLE "lesson_type"
     id                    serial PRIMARY KEY not null unique,
     name                  varchar(100)
 );
+INSERT INTO "lesson_type" (name) values('material'); 
+INSERT INTO "lesson_type" (name) values('test'); 
+
 CREATE TABLE "lesson"
 (
     id                    serial PRIMARY KEY not null unique,
@@ -75,32 +77,32 @@ CREATE TABLE "lesson_test"
     name                  varchar(255),
     lesson_text           text
 );
-
-
 -- lesson_test_question
 CREATE TABLE "lesson_test_question_type"
 (
     id                    serial PRIMARY KEY not null unique,
     name                  varchar(255)
 );
-CREATE TABLE "lesson_test_answer"
+CREATE TABLE "lesson_test_question"
 (
     id                    serial PRIMARY KEY not null unique,
-    answer_text           text null
+    lesson_id             int references "lesson"(id) on delete cascade,
+    lesson_test_question_type_id   int references "lesson_test_question_type"(id) on delete cascade,
+    name                  varchar(255)
+);
+
+CREATE TABLE "lesson_test_answer"
+(
+    id                      serial PRIMARY KEY not null unique,
+    answer_text             text null,
+    lesson_test_question_id        int references "lesson_test_question"(id) on delete cascade
+    right  bool 
 );
 CREATE TABLE "lesson_test_answer_src"
 (
     id                     serial PRIMARY KEY not null unique,
     lesson_test_answer_id  int references "lesson_test_answer"(id) on delete cascade,
     url                    varchar(255)
-);
-CREATE TABLE "lesson_test_question"
-(
-    id                    serial PRIMARY KEY not null unique,
-    lesson_id             int references "lesson"(id) on delete cascade,
-    lesson_test_question_type_id   int references "lesson_test_question_type"(id) on delete cascade,
-    name                  varchar(255),
-    lesson_right_answer_id      int references "lesson_test_answer"(id) on delete cascade
 );
 
 

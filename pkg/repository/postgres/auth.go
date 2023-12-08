@@ -40,12 +40,12 @@ func (r *AuthPostgres) SignUp(user ent.User) (int64, error) {
 
 func (r AuthPostgres) GetUserByLoginAndPassword(mail *string, password *string) (int64, error) {
 	var id int64
-	query := fmt.Sprintf(`SELECT id FROM "%s" WHERE login = $1`, userTable)
+	query := fmt.Sprintf(`SELECT id FROM "%s" WHERE email = $1`, userTable)
 	row := r.db.QueryRow(query, mail)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
-	query = fmt.Sprintf(`SELECT id FROM "%s" WHERE login = $1 AND password_hash = $2`, userTable)
+	query = fmt.Sprintf(`SELECT id FROM "%s" WHERE email = $1 AND password_hash = $2`, userTable)
 	row = r.db.QueryRow(query, mail, password)
 	if err := row.Scan(&id); err != nil {
 		return -1, err
