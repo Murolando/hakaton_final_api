@@ -202,7 +202,7 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 					
 				}
 				ans.Url = &url
-				question.Answers = append(question.Answers, ans)
+				question.Answers = append(question.Answers, &ans)
 			}
 			l.Question = &question
 

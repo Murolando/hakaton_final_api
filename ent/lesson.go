@@ -19,7 +19,7 @@ type Question struct {
 	QuestionTypeId string   `json:"question-type-id"`
 	QuestText      string   `json:"quest-text"`
 	Url            string   `json:"src-url,omitempty"`
-	Answers        []Answer `json:"answer"`
+	Answers        []*Answer `json:"answer"`
 }
 
 type Material struct {

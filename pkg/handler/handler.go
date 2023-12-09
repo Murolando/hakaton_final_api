@@ -34,6 +34,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			course.GET("/",h.userIdentity,h.allCourse)
 			course.GET("/:course-id",h.userIdentity,h.course)
 		}
+		finalTest := api.Group("/final")
+		{
+			finalTest.GET("/",h.userIdentity,h.startFinalTest)
+		}
 	}
 	return router
 }

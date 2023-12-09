@@ -180,6 +180,7 @@ CREATE TABLE "product"
     price                  int not null,
     url                    varchar(255)
 );
+
 -- news 
 CREATE TABLE "news"
 (
@@ -190,3 +191,51 @@ CREATE TABLE "news"
     url_image              varchar(255),
     url_video              varchar(255)
 );
+
+
+
+-- final test
+CREATE TABLE "final_test"
+(
+    id                    serial PRIMARY KEY not null unique,
+    test_description      text
+);
+INSERT INTO "final_test" (test_description) values('main test');
+
+CREATE TABLE "user_final"
+(
+    id                    serial PRIMARY KEY not null unique,
+    final_test_id   int references "final_test"(id) on delete cascade,
+    user_id         int references "user"(id) on delete cascade,
+    max_result      int,
+    last_result     int
+);
+
+CREATE TABLE "final_test_question_direction"
+(
+    id                    serial PRIMARY KEY not null unique,
+    name                  varchar(255)
+);
+INSERT INTO "final_test_question_direction" (name) values('cyberJil');
+
+CREATE TABLE "final_test_question"
+(
+    id                       serial PRIMARY KEY not null unique,
+    final_test_question_direction_id   int references "final_test_question_direction"(id) on delete cascade,
+    url                       varchar(255),
+    question                  varchar(255)
+);
+INSERT INTO "final_test_question" (question,url,final_test_question_direction_id) values('meme','123',1);
+
+CREATE TABLE "final_test_answer"
+(
+    id                      serial PRIMARY KEY not null unique,
+    answer_text             text null,
+    url                     varchar(255),
+    final_test_question_id int references "final_test_question"(id) on delete cascade,
+    correct                 bool 
+);
+INSERT INTO "final_test_answer" (final_test_question_id,answer_text,correct,url) values(1,'--',false,'123');
+INSERT INTO "final_test_answer" (final_test_question_id,answer_text,correct) values(1,'+',true);
+INSERT INTO "final_test_answer" (final_test_question_id,answer_text,correct) values(1,'=',false);
+INSERT INTO "final_test_answer" (final_test_question_id,answer_text,correct) values(1,'/',false);

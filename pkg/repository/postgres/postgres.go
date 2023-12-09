@@ -32,6 +32,11 @@ const (
 	roleTable = "role"
 	userLessonTable = "user_lesson"
 
+	finalTestTable = "final_test"
+	finalTestQuestionDirectionTable = "final_test_question_direction"
+	finalTestQuestionTable = "final_test_question"
+	finalTestAnswerTable = "final_test_answer"
+	userFinalTable = "user_final"
 )
 
 func NewConfig(host string, port string, user string, password string, dbname string) *Config {
