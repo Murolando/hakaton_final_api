@@ -38,6 +38,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			finalTest.GET("/",h.userIdentity,h.startFinalTest)
 		}
+		cards := api.Group("/cards")
+		{
+			cards.POST("/",h.userIdentity,h.addCard)
+			cards.GET("/",h.userIdentity,h.getCard)
+			cards.DELETE("/:card-id",h.userIdentity,h.deleteCard)
+		}
 	}
 	return router
 }

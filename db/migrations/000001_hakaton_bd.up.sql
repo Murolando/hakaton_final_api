@@ -239,3 +239,17 @@ INSERT INTO "final_test_answer" (final_test_question_id,answer_text,correct,url)
 INSERT INTO "final_test_answer" (final_test_question_id,answer_text,correct) values(1,'+',true);
 INSERT INTO "final_test_answer" (final_test_question_id,answer_text,correct) values(1,'=',false);
 INSERT INTO "final_test_answer" (final_test_question_id,answer_text,correct) values(1,'/',false);
+
+-- cards
+CREATE TABLE "cards"
+(
+    id                      serial PRIMARY KEY not null unique,
+    word                    varchar(50),
+    description             varchar(300)
+);
+CREATE TABLE "user_cards"
+(
+    id                      serial PRIMARY KEY not null unique,
+    user_id int references "user"(id) on delete cascade,
+    card_id int references "cards"(id) on delete cascade
+);

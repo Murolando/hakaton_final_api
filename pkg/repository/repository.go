@@ -19,10 +19,17 @@ type Course interface {
 type FinalTestPst interface {
 	StartFinalTest(userId int) (*ent.FinalTest, error)
 }
+type Card interface {
+	AddCard(card *ent.Card, userId int) (bool, error)
+	GetCard(userId int) ([]*ent.Card, error)
+	DeleteCard(cardId int) (bool, error)
+}
+
 type Repository struct {
 	Auth
 	Course
 	FinalTestPst
+	Card
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
@@ -30,5 +37,6 @@ func NewRepository(db *sqlx.DB) *Repository {
 		Auth:         postgres.NewAuthPostgres(db),
 		Course:       postgres.NewCoursePostgres(db),
 		FinalTestPst: postgres.NewFinalTestPostgres(db),
+		Card:         postgres.NewCardPostgres(db),
 	}
 }

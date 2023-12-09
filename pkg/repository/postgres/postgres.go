@@ -37,6 +37,9 @@ const (
 	finalTestQuestionTable = "final_test_question"
 	finalTestAnswerTable = "final_test_answer"
 	userFinalTable = "user_final"
+
+	cardsTable ="cards"
+	userCardsTable = "user_cards"
 )
 
 func NewConfig(host string, port string, user string, password string, dbname string) *Config {

@@ -20,10 +20,17 @@ type Course interface {
 type FinalTestSrv interface {
 	StartFinalTest(userId int) (*ent.FinalTest, error)
 }
+type Card interface {
+	AddCard(card *ent.Card, userId int) (bool, error)
+	GetCard(userId int) ([]*ent.Card, error)
+	DeleteCard(cardId int) (bool, error)
+}
+
 type Service struct {
 	Auth
 	Course
 	FinalTestSrv
+	Card
 }
 
 func NewService(repo *repository.Repository) *Service {
@@ -31,5 +38,6 @@ func NewService(repo *repository.Repository) *Service {
 		Auth:         NewAuthService(repo),
 		Course:       NewCourseService(repo),
 		FinalTestSrv: NewFinalTestService(repo),
+		Card:         NewCardService(repo),
 	}
 }

@@ -24,3 +24,7 @@ type FinalAnswer struct {
 	QuestionId int64   `json:"question-id"`
 	Url        *string `json:"src-url,omitempty"`
 }
+
+type UserAnswers struct{
+	
+}
