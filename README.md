@@ -1,18 +1,29 @@
-# default_rest_arch
 
-go get github.com/gin-gonic/gin
+# API PART 
 
-go get github.com/dgrijalva/jwt-go
+## Апи состоит из 4 частей и написано на основе чистой архитектуры ->
 
-go get github.com/jmoiron/sqlx
+### Handler(pkg/handler) - отвечает за эндпоинды и хэндлеры которые их обрабатывают + middleware
+### Service(pkg/sevice) - отвечает за бизнес логику
+### Handler(pkg/postgres) - отвечает за работу с базой данных
+### Ent (ent) - отвечает за сущности
 
-go get github.com/lib/pq
+### DB(db/migrations) - хранит миграции базы данных 
 
-### swagger
-go get github.com/swaggo
+---
+# Postgres part
+## База данных 
 
-github.com/swaggo/swag/cmd/swag
+--- 
 
-github.com/swaggo/files
+# Nginx part
+## для обработки запросов и возвращении статики
 
-github.com/swaggo/gin-swagger
+---
+
+# Minio part
+## S3 Хранилище на базе классического AWS S3 для хранение фото/видео и других файлов
+
+---
+
+# Схема Всего проекта
