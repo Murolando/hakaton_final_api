@@ -180,3 +180,13 @@ CREATE TABLE "product"
     price                  int not null,
     url                    varchar(255)
 );
+-- news 
+CREATE TABLE "news"
+(
+    id                     serial PRIMARY KEY not null unique,
+    title                  varchar(50),
+    news_text              text,
+    creation_datetime      TIMESTAMP(0) NOT NULL,
+    url_image              varchar(255),
+    url_video              varchar(255)
+);
