@@ -33,6 +33,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			course.GET("/",h.userIdentity,h.allCourse)
 			course.GET("/:course-id",h.userIdentity,h.course)
+			course.GET("/:lesson-id",h.userIdentity)
 		}
 		finalTest := api.Group("/final")
 		{
