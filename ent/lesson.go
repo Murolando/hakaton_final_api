@@ -18,13 +18,13 @@ type Question struct {
 	QuestionType   string   `json:"question-type"`
 	QuestionTypeId string   `json:"question-type-id"`
 	QuestText      string   `json:"quest-text"`
-	Url            string   `json:"src-url"`
+	Url            string   `json:"src-url,omitempty"`
 	Answers        []Answer `json:"answer"`
 }
 
 type Material struct {
 	Id         int64    `json:"material-id"`
-	Name       string   `json:"name"`
+	Name       *string   `json:"name"`
 	LessonText string   `json:"lesson-text"`
 	Url        []string `json:"src-urls,omitempty"`
 }

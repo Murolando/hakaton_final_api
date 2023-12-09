@@ -31,8 +31,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 		course := api.Group("/course")
 		{
-			course.GET("/",h.allCourse,h.userIdentity)
-			course.GET("/:course-id",h.course,h.userIdentity)
+			course.GET("/",h.userIdentity,h.allCourse)
+			course.GET("/:course-id",h.userIdentity,h.course)
 		}
 	}
 	return router

@@ -19,6 +19,7 @@ func NewCoursePostgres(db *sqlx.DB) *CoursePostgres {
 }
 
 func (r *CoursePostgres) AllCourses(userId int) ([]*ent.ShortCourse, error) {
+	fmt.Println(1)
 	courses := make([]*ent.ShortCourse, 0)
 	query := fmt.Sprintf(`
 	SELECT DISTINCT id,description,name,course_age,url
@@ -32,7 +33,7 @@ func (r *CoursePostgres) AllCourses(userId int) ([]*ent.ShortCourse, error) {
 		if err := rows.Scan(&sh.Id, &sh.Description, &sh.Name, &sh.CourseDifficulty, &sh.Url); err != nil {
 			return nil, err
 		}
-
+		fmt.Println(2)
 		var allLessonCount int
 		var userLessonCount int
 		q := fmt.Sprintf(`
@@ -43,7 +44,7 @@ func (r *CoursePostgres) AllCourses(userId int) ([]*ent.ShortCourse, error) {
 		if err := row.Scan(&allLessonCount); err != nil {
 			return nil, errors.New("bad Lesson Count")
 		}
-
+		fmt.Println(3)
 		q = fmt.Sprintf(`
 		SELECT COUNT(id)
 		FROM "%s" 
@@ -58,10 +59,12 @@ func (r *CoursePostgres) AllCourses(userId int) ([]*ent.ShortCourse, error) {
 		courses = append(courses, &sh)
 
 	}
+	fmt.Println(4)
 	return courses, nil
 }
 func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error) {
-	var course *ent.Course
+	fmt.Println(1,courseId,userId)
+	var course ent.Course
 	query := fmt.Sprintf(`
 	SELECT DISTINCT description,name,course_age,url
 	FROM "%s" 
@@ -70,7 +73,7 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 	if err := row.Scan(&course.Description, &course.Name, &course.CourseDifficulty, &course.Url); err != nil {
 		return nil, errors.New("bad Lesson Count")
 	}
-
+	fmt.Println(2)
 	// progress
 	var allLessonCount int
 	var userLessonCount int
@@ -82,7 +85,7 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 	if err := row.Scan(&allLessonCount); err != nil {
 		return nil, errors.New("bad Lesson Count")
 	}
-
+	fmt.Println(3)
 	q = fmt.Sprintf(`
 	SELECT COUNT(id)
 	FROM "%s" 
@@ -94,11 +97,11 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 
 	p := int(float32(userLessonCount) / float32(allLessonCount) * 100)
 	course.Progress = p
-
+	fmt.Println(4)
 	// lessons
 	lessons := make([]*ent.Lesson, 0)
 	query = fmt.Sprintf(`
-	SELECT DISTINCT id,lesson_type_id,course_id,value,name
+	SELECT DISTINCT id,lesson_type,course_id,value,name
 	FROM "%s"
 	WHERE course_id = $1`, lessonTable)
 	rows, err := r.db.Query(query, courseId)
@@ -111,6 +114,7 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 			return nil, err
 		}
 		if l.LessonTypeId == 1 {
+			fmt.Println(5)
 			//material
 			var m ent.Material
 			q = fmt.Sprintf(`
@@ -119,12 +123,13 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 			WHERE lesson_id=$1`, lessonMatTable)
 			row = r.db.QueryRow(q, l.Id)
 			if err := row.Scan(&m.Id, &m.Name, &m.LessonText); err != nil {
+				fmt.Println(err)
 				return nil, errors.New("bad material")
 			}
-
+			fmt.Println(6)
 			// material urls
 			q = fmt.Sprintf(`
-			SELECT name
+			SELECT url
 			FROM "%s" 
 			WHERE lesson_mat_id=$1`, lessonMatSrcTable)
 			rows2, err := r.db.Query(q, m.Id)
@@ -137,11 +142,14 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 				m.Url = append(m.Url, url)
 			}
 			if err := row.Scan(&m.Id, &m.Name, &m.LessonText); err != nil {
-				return nil, errors.New("bad material urls")
+				if err.Error() != "sql: no rows in result set"{
+					fmt.Println(err)
+					return nil, errors.New("bad material urls")
+				}
 			}
 			l.Material = &m
 		} else {
-
+			fmt.Println(7)
 			//question
 			var question ent.Question
 			q = fmt.Sprintf(`
@@ -149,10 +157,11 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 			FROM "%s" 
 			WHERE lesson_id=$1`, lessonTestQuestionTable)
 			row = r.db.QueryRow(q, l.Id)
-			if err := row.Scan(&question.Id, &question.QuestText, &question.QuestionTypeId); err != nil {
+			if err := row.Scan(&question.Id, &question.QuestText, &question.QuestionTypeId,&question.Url); err != nil {
+				fmt.Println(err)
 				return nil, errors.New("bad question")
 			}
-
+			fmt.Println(8)
 			// type name
 			q = fmt.Sprintf(`
 			SELECT name
@@ -160,16 +169,18 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 			WHERE id=$1`, lessonTestQuestionTypeTable)
 			row = r.db.QueryRow(q, question.QuestionTypeId)
 			if err := row.Scan(&question.QuestionType); err != nil {
+				fmt.Println(err)
 				return nil, errors.New("bad question type")
 			}
-
+			fmt.Println(9)
 			// answers
-			q = fmt.Sprintf(`
+			qur := fmt.Sprintf(`
 			SELECT id,answer_text,correct
 			FROM "%s" 
-			WHERE lesson_test_answer=$1`, lessonTestAnswerTable)
-			rows2, err := r.db.Query(q, question.Id)
+			WHERE lesson_test_question_id=$1`, lessonTestAnswerTable)
+			rows2, err := r.db.Query(qur, question.Id)
 			if err != nil {
+				fmt.Println(err)
 				return nil, err
 			}
 			for rows2.Next() {
@@ -177,13 +188,18 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 				var url string
 				ans.QuestionId = question.Id
 				rows2.Scan(&ans.Id,&ans.AnswerText, &ans.Right)
+				fmt.Println(10)
 				q = fmt.Sprintf(`
 				SELECT url
 				FROM "%s" 
 				WHERE lesson_test_answer_id=$1`, lessonTestAnswerSrcTable)
 				row3 := r.db.QueryRow(q, ans.Id)
 				if err := row3.Scan(&url); err != nil {
-					return nil, errors.New("bad question type")
+					if err.Error() != "sql: no rows in result set"{
+						fmt.Println(err)
+						return nil, errors.New("bad question type")
+					}
+					
 				}
 				ans.Url = &url
 				question.Answers = append(question.Answers, ans)
@@ -196,5 +212,5 @@ func (r *CoursePostgres) OneCourse(courseId int, userId int) (*ent.Course, error
 	}
 
 	course.Lessons = lessons
-	return course, nil
+	return &course, nil
 }

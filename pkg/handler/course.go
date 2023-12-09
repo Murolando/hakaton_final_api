@@ -14,8 +14,8 @@ func (h *Handler) course(c *gin.Context) {
 		return
 	}
 	userIdStr, _ := c.Get("userId")
-	userId := userIdStr.(int)
-	course, err := h.service.OneCourse(courseId, userId)
+	userId := userIdStr.(int64)
+	course, err := h.service.OneCourse(courseId, int(userId))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -26,8 +26,8 @@ func (h *Handler) course(c *gin.Context) {
 func (h *Handler) allCourse(c *gin.Context) {
 	userIdStr, _ := c.Get("userId")
 
-	userId := userIdStr.(int)
-	courses, err := h.service.AllCourses(userId)
+	userId := userIdStr.(int64)
+	courses, err := h.service.AllCourses(int(userId))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
