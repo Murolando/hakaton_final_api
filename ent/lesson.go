@@ -1,26 +1,38 @@
 package ent
 
 type Lesson struct {
-	LessonType string `json:"lesson-type"`
-	CourseId   int    `json:"course-id"`
-	CourseName string `json:"course-name"`
-	Value      int    `json:"value"`
-	Name       string `json:"name"`
+	Id           int64  `json:"lesson-id"`
+	LessonTypeId int    `json:"lesson-type-id"`
+	CourseId     int    `json:"course-id"`
+	CourseName   string `json:"course-name"`
+	Value        int    `json:"value"`
+	Name         string `json:"name"`
+	Passed       bool   `json:"passed"`
 
-	Questions []*Question `json:"questions,omitempty"`
-	Materials []*Material `json:"materials,omitempty"`
+	Question *Question `json:"question,omitempty"`
+	Material *Material `json:"material,omitempty"`
 }
 
 type Question struct {
+	Id             int64    `json:"material-id"`
 	QuestionType   string   `json:"question-type"`
 	QuestionTypeId string   `json:"question-type-id"`
-	LessonText     string   `json:"lesson-text"`
-	Url            []string `json:"src-urls"`
-	RightQuestion  int64
+	QuestText      string   `json:"quest-text"`
+	Url            string   `json:"src-url"`
+	Answers        []Answer `json:"answer"`
 }
 
 type Material struct {
+	Id         int64    `json:"material-id"`
 	Name       string   `json:"name"`
 	LessonText string   `json:"lesson-text"`
-	Url        []string `json:"src-urls"`
+	Url        []string `json:"src-urls,omitempty"`
+}
+
+type Answer struct {
+	Id         int64   `json:"answer-id"`
+	Right      bool    `json:"right"`
+	AnswerText string  `json:"answer-text"`
+	QuestionId int64   `json:"question-id"`
+	Url        *string `json:"src-url,omitempty"`
 }

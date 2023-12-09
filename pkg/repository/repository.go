@@ -12,13 +12,18 @@ type Auth interface {
 	SetSession(user int64, refresh string, expiredAt string) error
 	GetByRefreshToken(refresh string) (int64, error)
 }
-
+type Course interface{
+	AllCourses(userId int)([]*ent.ShortCourse,error)
+	OneCourse(courseId int,userId int )(*ent.Course,error)
+}
 type Repository struct {
 	Auth
+	Course
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Auth: postgres.NewAuthPostgres(db),
+		Course: postgres.NewCoursePostgres(db),
 	}
 }

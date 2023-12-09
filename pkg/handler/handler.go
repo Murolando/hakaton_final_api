@@ -29,6 +29,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			auth.POST("/sign-in", h.signIn)
 			auth.GET("/refresh/:refresh", h.newRefresh)
 		}
+		course := api.Group("/course")
+		{
+			course.GET("/",h.allCourse,h.userIdentity)
+			course.GET("/:course-id",h.course,h.userIdentity)
+		}
 	}
 	return router
 }

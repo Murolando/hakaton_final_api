@@ -13,13 +13,18 @@ type Auth interface {
 	NewRefreshToken(id int64) (string, error)
 	GetByRefreshToken(refresh string) (int64, error)
 }
-
+type Course interface {
+	AllCourses(userId int)([]*ent.ShortCourse,error)
+	OneCourse(courseId int,userId int )(*ent.Course,error)
+}
 type Service struct {
 	Auth
+	Course
 }
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Auth: NewAuthService(repo),
+		Course: NewCourseService(repo),
 	}
 }

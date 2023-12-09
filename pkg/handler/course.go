@@ -1,39 +1,36 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
+	"strconv"
 
-	"github.com/Murolando/hakaton_final_api/ent"
 	"github.com/gin-gonic/gin"
 )
 
 func (h *Handler) course(c *gin.Context) {
-	var input ent.User
-	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+	courseId, err := strconv.Atoi(c.Param("course-id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	fmt.Println(input)
-	token, err := h.service.SignUp(input)
+	userIdStr, _ := c.Get("userId")
+	userId := userIdStr.(int)
+	course, err := h.service.OneCourse(courseId, userId)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	newResponse(c, "", token)
+	newResponse(c, "", course)
 }
 
-func (h *Handler) AllCourse(c *gin.Context) {
-	var input ent.User
-	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-	fmt.Println(input)
-	token, err := h.service.SignUp(input)
+func (h *Handler) allCourse(c *gin.Context) {
+	userIdStr, _ := c.Get("userId")
+
+	userId := userIdStr.(int)
+	courses, err := h.service.AllCourses(userId)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	newResponse(c, "", token)
+	newResponse(c, "courses", courses)
 }

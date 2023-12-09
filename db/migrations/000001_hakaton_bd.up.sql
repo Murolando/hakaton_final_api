@@ -88,15 +88,16 @@ CREATE TABLE "lesson_test_question"
     id                    serial PRIMARY KEY not null unique,
     lesson_id             int references "lesson"(id) on delete cascade,
     lesson_test_question_type_id   int references "lesson_test_question_type"(id) on delete cascade,
-    name                  varchar(255)
+    url                       varchar(255),
+    question                  varchar(255)
 );
 
 CREATE TABLE "lesson_test_answer"
 (
     id                      serial PRIMARY KEY not null unique,
     answer_text             text null,
-    lesson_test_question_id        int references "lesson_test_question"(id) on delete cascade
-    right  bool 
+    lesson_test_question_id int references "lesson_test_question"(id) on delete cascade,
+    correct                 bool 
 );
 CREATE TABLE "lesson_test_answer_src"
 (
